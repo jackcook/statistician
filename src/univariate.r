@@ -21,7 +21,7 @@ analyze_univariate_data <- function(data, context) {
   upper_fence <- summary[[4]] + 1.5 * iqr
   
   skew <- skewness(data)
-  skewed <- skew > 0.5 || skew < -0.5
+  skewed <- skew > 0.5 | skew < -0.5
   
   # center
   if (skewed) {
