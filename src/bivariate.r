@@ -11,5 +11,5 @@ analyze_bivariate_data <- function(matrix, explanatory_variable, response_variab
     linear_description <- "strongly"
   }
   
-  paste(c("As ", explanatory_variable, " increases ", response_variable, " tends to ", inc_or_dec, ". The association is ", linear_description, " linear, as evidenced by r = ", r, "."), collapse = "")
+  paste(c("As ", explanatory_variable, " increases, ", response_variable, " tends to ", inc_or_dec, ". The association is ", linear_description, " linear, as evidenced by r = ", r, "."), collapse = "")
 }

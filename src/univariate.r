@@ -2,25 +2,34 @@ library(e1071)
 
 source("number.r")
 
-analyze_univariate_data <- function(data) {
+analyze_univariate_data <- function(data, context) {
+  #data <- c(-1.44, -0.75, -0.69, -0.88, 0.12, 0.75, 0.81, -1.75, 0.69, -0.22,
+  #          -0.16, 0.34, 0.78, 0.62, 2.44, -0.28, 2.22, -0.50, 2.06, -0.88,
+  #          -4.50, 4.12, 1.16, -0.50)
+  
+  analysis <<- c()
+  
+  add_analysis <- function(text) {
+    analysis[length(analysis) + 1] <<- text
+  }
+  
+  data <- sort(data)
+  
   summary <- quantile(data)
   iqr <- round(summary[[4]] - summary[[2]], 4)
   lower_fence <- summary[[2]] - 1.5 * iqr
   upper_fence <- summary[[4]] + 1.5 * iqr
   
   skew <- skewness(data)
-  skewed <- skew > 0.5 | skew < -0.5
-  
-  context <- c("stock price change", "stock price changes")
-  analysis <- c()
+  skewed <- skew > 0.5 || skew < -0.5
   
   # center
   if (skewed) {
     med <- round(median(data), 4)
-    analysis[length(analysis) + 1] <- paste(c("The", context[2], "have a median of", med), collapse = " ")
+    add_analysis(paste(c("The", context, "have a median of", med), collapse = " "))
   } else {
     mean <- round(mean(data), 4)
-    analysis[length(analysis) + 1] <- paste(c("The", context[2], "have a mean of", mean), collapse = " ")
+    add_analysis(paste(c("The", context, "have a mean of", mean), collapse = " "))
   }
   
   # outliers
@@ -34,11 +43,11 @@ analyze_univariate_data <- function(data) {
   }
   
   if (length(outliers) == 1) {
-    analysis[length(analysis) + 1] <- paste(c("There is one outlier of", outliers[1]), collapse = " ")
-  } else {
+    add_analysis(paste(c("There is one outlier of", outliers[1]), collapse = " "))
+  } else if (length(outliers) > 1) {
     word <- numbers2words(length(outliers))
     outliers_list <- c(paste(outliers[1:length(outliers) - 1], collapse = ", "), "and", outliers[length(outliers)])
-    analysis[length(analysis) + 1] <- paste(c("There are", word, "outliers:", outliers_list), collapse = " ")
+    add_analysis(paste(c("There are", word, "outliers:", outliers_list), collapse = " "))
   }
   
   # normality
@@ -49,27 +58,27 @@ analyze_univariate_data <- function(data) {
   normal_probability_correlation <- cor(data, percentile_zscores)
   
   if (normal_probability_correlation > 0.95) {
-    analysis[length(analysis) + 1] <- paste("The distribution of the", context[2], "appears to be normal", collapse = " ")
+    add_analysis(paste("The distribution of the", context, "appears to be normal", collapse = " "))
   }
   
   # shape
   if (skew > 1.5) {
-    analysis[length(analysis) + 1] <- paste("The", context[2], "are heavily skewed to the left", collapse = " ")
+    add_analysis(paste("The", context, "are heavily skewed to the left", collapse = " "))
   } else if (skew > 0.5) {
-    analysis[length(analysis) + 1] <- paste("The", context[2], "are skewed left", collapse = " ")
+    add_analysis(paste("The", context, "are skewed left", collapse = " "))
   } else if (skew < -0.5) {
-    analysis[length(analysis) + 1] <- paste("The", context[2], "are skewed right", collapse = " ")
+    add_analysis(paste("The", context, "are skewed right", collapse = " "))
   } else if (skew < -1.5) {
-    analysis[length(analysis) + 1] <- paste("The", context[2], "are heavily skewed to the right", collapse = " ")
+    add_analysis(paste("The", context, "are heavily skewed to the right", collapse = " "))
   }
   
   # spread
   if (length(outliers) == 0) {
     data_range <- range(data)[2] - range(data)[1]
-    analysis[length(analysis) + 1] <- paste(c("The", context[2], "have a range of", data_range), collapse = " ")
+    add_analysis(paste(c("The", context, "have a range of", data_range), collapse = " "))
   } else {
-    analysis[length(analysis) + 1] <- paste(c("The", context[2], "have a standard deviation of", round(sd(data), 4), "and an IQR of", iqr), collapse = " ")
+    add_analysis(paste(c("The", context, "have a standard deviation of", round(sd(data), 4), "and an IQR of", iqr), collapse = " "))
   }
   
-  return(paste(analysis, collapse = ". "))
+  return(paste(c(paste(analysis, collapse = ". "), "."), collapse = ""))
 }

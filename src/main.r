@@ -1,11 +1,27 @@
-setwd("/Users/jackcook/Desktop/statistician")
+setwd("/Users/jackcook/Desktop/statistician/src")
 
+source("bivariate.r")
 source("univariate.r")
 
-data <- c(-1.44, -0.75, -0.69, -0.88, 0.12, 0.75, 0.81, -1.75, 0.69, -0.22,
-          -0.16, 0.34, 0.78, 0.62, 2.44, -0.28, 2.22, -0.50, 2.06, -0.88,
-          -4.50, 4.12, 1.16, -0.50)
-data <- sort(data)
+data_type <- readline(prompt = "What type of data would you like to analyze? (1 = univariate, 2 = bivariate): ")
 
-analysis <- analyze_univariate_data(data)
-print(analysis)
+if (data_type == 1) {
+  name <- readline(prompt = "What is being measured? ")
+  data_points <- readline(prompt = "Enter in your data values, separated by spaces: ")
+  values <- as.numeric(strsplit(data_points, " ")[[1]])
+  analysis <- analyze_univariate_data(values, name)
+  print(analysis)
+} else if (data_type == 2) {
+  explanatory_name <- readline(prompt = "What is your explanatory variable measuring? ")
+  response_name <- readline(prompt = "What is your response variable measuring? ")
+  
+  explanatory_variable <- readline(prompt = "Enter in your explanatory variable values, separated by spaces: ")
+  response_variable <- readline(prompt = "Enter in your response variable values, separated by spaces: ")
+  
+  explanatory_values <- as.numeric(strsplit(explanatory_variable, " ")[[1]])
+  response_values <- as.numeric(strsplit(response_variable, " ")[[1]])
+  
+  data <- matrix(cbind(explanatory_values, response_values), ncol = 2)
+  analysis <- analyze_bivariate_data(data, explanatory_name, response_name)
+  print(analysis)
+}
