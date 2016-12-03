@@ -80,5 +80,6 @@ analyze_univariate_data <- function(data, context) {
     add_analysis(paste(c("The", context, "have a standard deviation of", round(sd(data), 4), "and an IQR of", iqr), collapse = " "))
   }
   
+  hist(data)
   return(paste(c(paste(analysis, collapse = ". "), "."), collapse = ""))
 }
