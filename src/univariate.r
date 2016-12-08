@@ -74,8 +74,8 @@ analyze_univariate_data <- function(data, context) {
   
   # spread
   if (length(outliers) == 0) {
-    data_range <- range(data)[2] - range(data)[1]
-    add_analysis(paste(c("The", context, "have a range of", data_range), collapse = " "))
+    range <- max(data) - min(data)
+    add_analysis(paste(c("The", context, "have a range of", range), collapse = " "))
   } else {
     add_analysis(paste(c("The", context, "have a standard deviation of", round(sd(data), 4), "and an IQR of", iqr), collapse = " "))
   }
