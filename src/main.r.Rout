@@ -1,0 +1,71 @@
+
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin16.1.0 (64-bit)
+
+R est un logiciel libre livré sans AUCUNE GARANTIE.
+Vous pouvez le redistribuer sous certaines conditions.
+Tapez 'license()' ou 'licence()' pour plus de détails.
+
+R est un projet collaboratif avec de nombreux contributeurs.
+Tapez 'contributors()' pour plus d'information et
+'citation()' pour la façon de le citer dans les publications.
+
+Tapez 'demo()' pour des démonstrations, 'help()' pour l'aide
+en ligne ou 'help.start()' pour obtenir l'aide au format HTML.
+Tapez 'q()' pour quitter R.
+
+[Sauvegarde de la session précédente restaurée]
+
+Pendant le démarrage - Warning messages:
+1: Setting LC_COLLATE failed, using "C" 
+2: Setting LC_TIME failed, using "C" 
+3: Setting LC_MESSAGES failed, using "C" 
+4: Setting LC_MONETARY failed, using "C" 
+> setwd("/Users/jackcook/Desktop/statistician/src")
+> 
+> source("bivariate.r")
+> source("univariate.r")
+> 
+> data_type <- readline(prompt = "What type of data would you like to analyze? (1 = univariate, 2 = bivariate, 3 = categorical): ")
+What type of data would you like to analyze? (1 = univariate, 2 = bivariate, 3 = categorical): 
+> 
+> if (data_type == 1) {
++   name <- readline(prompt = "What is being measured? ")
++   data_points <- readline(prompt = "Enter in your data values, separated by spaces: ")
++   values <- as.numeric(strsplit(data_points, " ")[[1]])
++   analysis <- analyze_univariate_data(values, name)
++   print(analysis)
++ } else if (data_type == 2) {
++   explanatory_name <- readline(prompt = "What is your explanatory variable measuring? ")
++   response_name <- readline(prompt = "What is your response variable measuring? ")
++   
++   explanatory_variable <- readline(prompt = "Enter in your explanatory variable values, separated by spaces: ")
++   response_variable <- readline(prompt = "Enter in your response variable values, separated by spaces: ")
++   
++   explanatory_values <- as.numeric(strsplit(explanatory_variable, " ")[[1]])
++   response_values <- as.numeric(strsplit(response_variable, " ")[[1]])
++   
++   data <- matrix(cbind(explanatory_values, response_values), ncol = 2)
++   analysis <- analyze_bivariate_data(data, explanatory_name, response_name)
++   print(analysis)
++ } else if (data_type == 3) {
++   categories_name <- readline(prompt = "What are your categories? ")
++   categories <- readline(prompt = "Enter in your category names, separated by spaces: ")
++   values <- readline(prompt = "Enter in your categories' values, separated by spaces: ")
++   
++   category_names <- strsplit(categories, " ")[[1]]
++   category_values <- as.numeric(strsplit(values, " ")[[1]])
++   
++   percentages <- round(category_values / sum(category_values) * 100)
++   
++   lbls <- category_names
++   lbls <- paste(lbls, percentages)
++   lbls <- paste(lbls, "%", sep = "")
++   
++   pie(category_values, labels = lbls, main = categories_name)
++ }
+> 
+> proc.time()
+utilisateur     système      écoulé 
+      0.132       0.025       0.145 
