@@ -23,8 +23,8 @@ installed like so:
 install.package("e1071")
 ```
 
-After that, you should be able to run Statistician from the command line and
-follow its prompts without issue.
+After that, you should be able to run `main.r` from the command line and follow
+its prompts without issue.
 
 ## License
 
