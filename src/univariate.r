@@ -57,19 +57,19 @@ analyze_univariate_data <- function(data, context) {
   percentile_zscores <- (percentiles - mean(percentiles)) / sd(percentiles)
   normal_probability_correlation <- cor(data, percentile_zscores)
   
-  if (normal_probability_correlation > 0.95) {
+  if (normal_probability_correlation > 0.975) {
     add_analysis(paste("The distribution of the", context, "appears to be normal", collapse = " "))
   }
   
   # shape
   if (skew > 1.5) {
-    add_analysis(paste("The", context, "are heavily skewed to the left", collapse = " "))
-  } else if (skew > 0.5) {
-    add_analysis(paste("The", context, "are skewed left", collapse = " "))
-  } else if (skew < -0.5) {
-    add_analysis(paste("The", context, "are skewed right", collapse = " "))
-  } else if (skew < -1.5) {
     add_analysis(paste("The", context, "are heavily skewed to the right", collapse = " "))
+  } else if (skew > 0.5) {
+    add_analysis(paste("The", context, "are skewed right", collapse = " "))
+  } else if (skew < -0.5) {
+    add_analysis(paste("The", context, "are skewed left", collapse = " "))
+  } else if (skew < -1.5) {
+    add_analysis(paste("The", context, "are heavily skewed to the left", collapse = " "))
   }
   
   # spread
